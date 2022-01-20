@@ -10,7 +10,7 @@ node {
         stage ('SCM') {
 		deleteDir()
 		//cleanWs()
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'RGgitcred', url: 'https://github.com/hellorkg/EmailDemo.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'RGgitcred', url: 'https://github.com/hellorkg/DemoJob.git']]])
 		stageName="CHECKOUT"
 		git_id = sh (returnStdout: true, script:"""git log --oneline --pretty=format:"%H" | head -n 1 """).trim()
 				println git_id
@@ -23,7 +23,7 @@ node {
 		stagename="BUILD"
 		def stage="Build"
         	sh "echo 'shell scripts to build project...'"
-		succEmail(stage,devname,git_id)
+		//succEmail(stage,devname,git_id)
         }
         stage ('Tests') {
 		stagename="TEST"
@@ -37,20 +37,20 @@ node {
 	        'integration': {
 	            sh "echo 'shell scripts to run integration tests.....'"
 	        }
-		succEmail(stage,devname,git_id)
+		//succEmail(stage,devname,git_id)
         }
       	stage ('Deploy') {
 		stagename="DEPLOY"
 		def stage="Deploy"
             sh "echo 'shell scripts to deploy to server...'"
-			succEmail(stage,devname,git_id)
+			//succEmail(stage,devname,git_id)
       	}
     } catch (err) {
                      echo "Build failed with exception: "
 				println(err)
 				JobResult = "FAILED"
 				currentBuild.result = "FAILED"
-				notifyFailed(devname)
+				//notifyFailed(devname)
 	            throw err
     }
 }
